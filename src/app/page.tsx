@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle, RefreshCw } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Timeline } from "@/components/timeline"
 
 type Incident = {
   id: string
@@ -113,11 +114,11 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#0f172a]">
       <Navbar />
       
-      <main className="flex-1 p-4 md:p-6">
-        <div className="container mx-auto">
+      <main className="flex-1 p-4 md:p-6 w-full">
+        <div className="w-full max-w-[2000px] mx-auto">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-2xl font-bold tracking-tight">Incident Dashboard</h1>
             <Button 
@@ -140,23 +141,32 @@ export default function Dashboard() {
           )}
           
           <div className={cn(
-            "grid gap-6",
-            isFullscreen ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-3"
+            "flex flex-col gap-6 w-full",
+            isFullscreen ? "" : "lg:flex-row"
           )}>
             <div className={cn(
-              "lg:col-span-2",
-              isFullscreen ? "lg:col-span-1" : ""
+              "w-full",
+              isFullscreen ? "" : "lg:w-2/3"
             )}>
-              <IncidentPlayer
-                incident={selectedIncident || null}
-                onResolve={handleResolveIncident}
-                isFullscreen={isFullscreen}
-                onToggleFullscreen={toggleFullscreen}
-              />
+              <div className="flex flex-col gap-4 w-full">
+                <div className={cn("w-full", isFullscreen ? "max-w-[2000px]" : "")}>
+                  <IncidentPlayer
+                    incident={selectedIncident || null}
+                    onResolve={handleResolveIncident}
+                    isFullscreen={isFullscreen}
+                    onToggleFullscreen={toggleFullscreen}
+                  />
+                </div>
+                {!isFullscreen && (
+                  <div className="w-full">
+                    <Timeline />
+                  </div>
+                )}
+              </div>
             </div>
             
             {!isFullscreen && (
-              <div className="lg:col-span-1">
+              <div className="w-full lg:w-1/3">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold">Recent Incidents</h2>
                   <span className="text-sm text-muted-foreground">
